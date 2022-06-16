@@ -52,41 +52,13 @@ def banners():
 
 
 def getoption():
-    print("{}[1]{} Single Site".format(fg, fw))
-    print("{}[2]{} Multiple Site".format(fg, fw))
-    choiceoption=input('Put Number => ')
-    if choiceoption=='1':
-        url = input("\n\033[92m[!]\033[91m ENTER WEBSITE : ")
-        singlescan(url)
-        print('Finished in : ' + str(timer() - start) + ' seconds')
-        
-    elif choiceoption=='2':
-        start_raw = input("\n\033[92m[!]\033[91m ENTER LIST OF WEBSITES : ")
-        try:
-            with open(start_raw, 'r') as f:
-                url = f.read().splitlines()
-        except IOError:
-            pass
-        start = timer()
-        ThreadPool = Pool(100)
-        Threads = ThreadPool.map(multiplescan, url)
-        print('PrivateBot Finished in : ' + str(timer() - start) + ' seconds')
-
-def singlescan(url):
+    url = input("{}[1]{} ENTER WEBSITE : ".format(fg, fw))
     print("\n{}[+] Vulnerability: SQLi{}\n".format(fg, sn))
     print("{}{}Finding SQLi entry points in the domain...{}\n\n".format(sn, fc, sn))
-    os.system("sudo gau "+url+"| gf sqli | tee "+url+".txt")
+    os.system("gau "+url+"| gf sqli | tee sqli_paramaters.txt")
     print("\n")
     print("{}{}Checking if the entry points are vulnerable...{}\n\n" .format(sn, fc, sn))
-    os.system("sqlmap -m "+url+".txt -v 3 --batch --random-agent --level 5 --risk 3 | tee -a sqli.txt")
-
-def multiplescan(url):
-    print("\n{}[+] Vulnerability: SQLi{}\n".format(fg, sn))
-    print("{}{}Finding SQLi entry points in the domain...{}\n\n".format(sn, fc, sn))
-    os.system("sudo gau "+url+"| gf sqli | tee "+url+".txt")
-    print("\n")
-    print("{}{}Checking if the entry points are vulnerable...{}\n\n" .format(sn, fc, sn))
-    os.system("sqlmap -m "+url+".txt -v 3 --batch --random-agent --level 5 --risk 3 | tee -a sqli.txt")
+    os.system("sqlmap -m sqli_paramaters.txt -v 3 --batch --random-agent --level 5 --risk 3 | tee -a sqli.txt")
 
 def installreq():
     print("\n{}[+] Installing Requirement{}\n".format(fg, sn))
