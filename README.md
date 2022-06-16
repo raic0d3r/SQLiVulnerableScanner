@@ -38,6 +38,11 @@ SQLiVulnerableScanner - A simple Scanner tool.
     apt install python -yy
     ```
     
+3. Install package
+    ```
+    apt install sqlmap -yy
+    ```    
+    
 4. Clone the repository
     ```
     git clone https://github.com/raic0d3r/SQLiVulnerableScanner.git
