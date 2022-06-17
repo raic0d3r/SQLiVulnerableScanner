@@ -17,7 +17,7 @@ sb  =   Style.BRIGHT
 
 def banners():
     try:
-        os.mkdir('CMS')
+        os.mkdir('logs')
     except:
         pass
         
