@@ -99,7 +99,7 @@ def getoption():
             choiceoptions=input('Put Number => ')
             if choiceoptions=='1':
                 print("{}{}Checking if the entry points are vulnerable...{}\n\n" .format(sn, fc, sn))
-                os.system("sqlmap -m logs/sqli_paramaters.txt -v 3 --batch --random-agent --level 5 --risk 3 | tee -a sqli.txt")
+                os.system("sqlmap -m logs/sqli_paramaters.txt -v 3 --batch --random-agent --level 5 --risk 3 | tee -a SQLiVulnerable.txt")
             elif choiceoptions=='2':
                 exit()
 
@@ -123,7 +123,7 @@ def getoption():
             choiceoptions=input('Put Number => ')
             if choiceoptions=='1':
                 print("{}{}Checking if the entry points are vulnerable...{}\n\n" .format(sn, fc, sn))
-                os.system("sqlmap -m logs/sqli_paramaters.txt -v 3 --batch --random-agent --level 5 --risk 3 | tee -a sqli.txt")
+                os.system("sqlmap -m logs/sqli_paramaters.txt -v 3 --batch --random-agent --level 5 --risk 3 | tee -a SQLiVulnerable.txt")
             elif choiceoptions=='2':
                 exit()
 
