@@ -187,8 +187,6 @@ path = Path(path_to_file)
 path1 = Path(path_to_file1)
 
 if path.is_file() & path1.is_file():
-    print(f'The file {path_to_file} & {path_to_file1} exists')
     getoption()
 else:
-    print(f'The file {path_to_file} & {path_to_file1} does not exist')
     installreq()
