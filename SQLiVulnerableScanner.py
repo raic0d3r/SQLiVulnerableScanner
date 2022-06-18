@@ -99,7 +99,7 @@ def getoption():
             choiceoptions=input('Put Number => ')
             if choiceoptions=='1':
                 print("{}{}Checking if the entry points are vulnerable...{}\n\n" .format(sn, fc, sn))
-                os.system("sqlmap -m logs/sqli_paramaters.txt -v 3 --batch --random-agent --level 5 --risk 3 | tee -a SQLiVulnerable.txt")
+                os.system("sqlmap -m logs/sqli_paramaters.txt -v 3 --batch --random-agent --level 5 --risk 3 | tee -a sqli.txt")
             elif choiceoptions=='2':
                 exit()
 
@@ -123,7 +123,7 @@ def getoption():
             choiceoptions=input('Put Number => ')
             if choiceoptions=='1':
                 print("{}{}Checking if the entry points are vulnerable...{}\n\n" .format(sn, fc, sn))
-                os.system("sqlmap -m logs/sqli_paramaters.txt -v 3 --batch --random-agent --level 5 --risk 3 | tee -a SQLiVulnerable.txt")
+                os.system("sqlmap -m logs/sqli_paramaters.txt -v 3 --batch --random-agent --level 5 --risk 3 | tee -a sqli.txt")
             elif choiceoptions=='2':
                 exit()
 
@@ -136,18 +136,14 @@ def singlescan(url):
         print("{}{}[😞]Not Found SQLi entry points in the domain...{}\n\n" .format(sn, fc, sn))
     else:
         print("{}{}[😍]Checking if the entry points are vulnerable...{}\n\n" .format(sn, fc, sn))
-        domain = open("logs/sqli_paramaters", 'r').read().splitlines()   
-        for domain in domain:
-            payloads = ("'", "')", "';", '"', '")', '";', '`', '`)', '`;', '\\', "%27", "%%2727", "%25%27", "%60", "%5C")
-            for payload in payloads:
-                website = domain + payload
-                r = requests.get(website, headers=Headers ,timeout=10)
-                source = html.unescape(r.text)
-                if source:
-                    vulnerable, db = check(source)
-                    if vulnerable and db != None:
-                        print("\n{}[✓] Vulnerable =>{}{}\n".format(fg, website, sn))
-                        open('SQLiVulnerable.txt', 'a').write(website+'\n')
+        try:
+            with open("logs/sqli_paramaters", 'r') as f:
+                domain = f.read().splitlines()
+        except IOError:
+            pass
+        start = timer()
+        ThreadPool = Pool(100)
+        Threads = ThreadPool.map(scanner, domain)
 
 def multiplescan(url):
     print("\n{}[+] Vulnerability: SQLi{}\n".format(fg, sn))
@@ -158,18 +154,26 @@ def multiplescan(url):
         print("{}{}[😞]Not Found SQLi entry points in the domain...{}\n\n" .format(sn, fc, sn))
     else:
         print("{}{}[😍]Checking if the entry points are vulnerable...{}\n\n" .format(sn, fc, sn))
-        domain = open("logs/sqli_paramaters", 'r').read().splitlines()   
-        for domain in domain:
-            payloads = ("'", "')", "';", '"', '")', '";', '`', '`)', '`;', '\\', "%27", "%%2727", "%25%27", "%60", "%5C")
-            for payload in payloads:
-                website = domain + payload
-                r = requests.get(website, headers=Headers ,timeout=10)
-                source = html.unescape(r.text)
-                if source:
-                    vulnerable, db = check(source)
-                    if vulnerable and db != None:
-                        print("\n{}[✓] Vulnerable =>{}{}\n".format(fg, website, sn))
-                        open('SQLiVulnerable.txt', 'a').write(website+'\n')
+        try:
+            with open("logs/sqli_paramaters", 'r') as f:
+                domain = f.read().splitlines()
+        except IOError:
+            pass
+        start = timer()
+        ThreadPool = Pool(100)
+        Threads = ThreadPool.map(scanner, domain)
+
+def scanner(domain):
+    payloads = ("'", "')", "';", '"', '")', '";', '`', '`)', '`;', '\\', "%27", "%%2727", "%25%27", "%60", "%5C")
+    for payload in payloads:
+        website = domain + payload
+        r = requests.get(website, headers=Headers ,timeout=10)
+        source = html.unescape(r.text)
+        if source:
+            vulnerable, db = check(source)
+            if vulnerable and db != None:
+                print("\n{}[✓] Vulnerable =>{}{}\n".format(fg, website, sn))
+                open('SQLiVulnerable.txt', 'a').write(website+'\n')
 
 def installreq():
     print("\n{}[+] Installing Requirement{}\n".format(fg, sn))
@@ -187,6 +191,8 @@ path = Path(path_to_file)
 path1 = Path(path_to_file1)
 
 if path.is_file() & path1.is_file():
+    #print(f'The file {path_to_file} & {path_to_file1} exists')
     getoption()
 else:
+    print(f'The file {path_to_file} & {path_to_file1} does not exist')
     installreq()
