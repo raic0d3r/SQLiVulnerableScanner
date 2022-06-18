@@ -1,5 +1,5 @@
 import re, requests, os, sys
-import html
+import html, urllib.request
 from time import time as timer  
 from multiprocessing.dummy import Pool
 from pathlib import Path
@@ -167,10 +167,11 @@ def scanner(domain):
     payloads = ("'", "')", "';", '"', '")', '";', '`', '`)', '`;', '\\', "%27", "%%2727", "%25%27", "%60", "%5C")
     for payload in payloads:
         website = domain + payload
-        r = requests.get(website, headers=Headers ,timeout=10)
-        source = html.unescape(r.text)
-        if source:
-            vulnerable, db = check(source)
+        source = urllib.request.urlopen(website).read()
+        mystr = source.decode("utf8")
+        #source = html.unescape(r.text)
+        if mystr:
+            vulnerable, db = check(mystr)
             if vulnerable and db != None:
                 print("\n{}[✓] Vulnerable =>{}{}\n".format(fg, website, sn))
                 open('SQLiVulnerable.txt', 'a').write(website+'\n')
@@ -191,7 +192,7 @@ path = Path(path_to_file)
 path1 = Path(path_to_file1)
 
 if path.is_file() & path1.is_file():
-    #print(f'The file {path_to_file} & {path_to_file1} exists')
+    print(f'The file {path_to_file} & {path_to_file1} exists')
     getoption()
 else:
     print(f'The file {path_to_file} & {path_to_file1} does not exist')
