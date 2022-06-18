@@ -1,5 +1,5 @@
 import re, requests, os, sys
-import html, urllib.request
+import html, urllib.request, urllib.error
 from time import time as timer  
 from multiprocessing.dummy import Pool
 from pathlib import Path
@@ -164,17 +164,30 @@ def multiplescan(url):
         Threads = ThreadPool.map(scanner, domain)
 
 def scanner(domain):
-    payloads = ("'", "')", "';", '"', '")', '";', '`', '`)', '`;', '\\', "%27", "%%2727", "%25%27", "%60", "%5C")
-    for payload in payloads:
-        website = domain + payload
-        source = urllib.request.urlopen(website).read()
-        mystr = source.decode("utf8")
-        #source = html.unescape(r.text)
-        if mystr:
-            vulnerable, db = check(mystr)
-            if vulnerable and db != None:
-                print("\n{}[✓] Vulnerable =>{}{}\n".format(fg, website, sn))
-                open('SQLiVulnerable.txt', 'a').write(website+'\n')
+    try:
+        payloads = ("'", "')", "';", '"', '")', '";', '`', '`)', '`;', '\\', "%27", "%%2727", "%25%27", "%60", "%5C")
+        for payload in payloads:
+            website = domain + payload
+            source = urllib.request.urlopen(website).read()
+            mystr = source.decode("utf8")
+            #source = html.unescape(r.text)
+            if mystr:
+                vulnerable, db = check(mystr)
+                if vulnerable and db != None:
+                    print("\n{}[✓] Vulnerable =>{}{}\n".format(fg, website, sn))
+                    open('SQLiVulnerable.txt', 'a').write(website+'\n')
+                    
+    except urllib.error.URLError:
+        pass
+
+    except urllib.error.HTTPError:
+        pass        
+
+    except KeyboardInterrupt:
+        raise KeyboardInterrupt
+
+    except:
+        pass
 
 def installreq():
     print("\n{}[+] Installing Requirement{}\n".format(fg, sn))
