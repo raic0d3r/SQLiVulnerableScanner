@@ -19,7 +19,6 @@ SQLiVulnerableScanner - A simple Scanner tool.
 - [Environments](#environments)
 - [Disclaimer](#disclaimer)
 - [Author](#author)
-- [Thanks](#thanks)
 - [License](#license)
 
 ## Installation
@@ -77,7 +76,7 @@ SQLiVulnerableScanner - A simple Scanner tool.
    - [ ] ~~Find deface path~~
 
 ## Environments
-
+* Windows
 * Linux
 * Android (Termux)
 
@@ -91,8 +90,6 @@ by [**Raihan Uddin**](https://t.me/raic0d3r)
 
 ([Table of Contents](#table-of-contents))
 
-## Thanks
-@1ndianl33t , @tomnomnom , @lc
 
 ## License
 
