@@ -99,6 +99,7 @@ def singlescan(url):
     print("{}{}Finding SQLi entry points in the domain...{}\n\n".format(sn, fc, sn))
     Req = urllib.request.urlopen('http://web.archive.org/cdx/search/cdx?url=*.'+url+'/*&output=html&fl=original&collapse=urlkey', timeout=10).read().decode("utf8").splitlines()
     for url in Req:
+        print("{}{}[]==> {}{}\n\n" .format(sn, fc, url, sn))
         if re.search('(.*?)(.php\?|.asp\?|.apsx\?|.jsp\?)(.*?)=(.*?)', url):
             print("{}{}[😍]Checking if the entry points are vulnerable...{}\n\n" .format(sn, fc, sn))
             #print("{}{}[]==> {}{}\n\n" .format(sn, fc, url, sn))
@@ -111,7 +112,6 @@ def singlescan(url):
 
 def scanner(url):
     try:
-        print("{}{}[]==> {}{}\n\n" .format(sn, fc, url, sn))
         payloads = ("'", "')", "';", '"', '")', '";', '`', '`)', '`;', '\\', "%27", "%%2727", "%25%27", "%60", "%5C")
         for payload in payloads:
             website = url + payload
@@ -138,4 +138,3 @@ def scanner(url):
 
 banners()
 getoption()
-
